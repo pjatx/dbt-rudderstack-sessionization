@@ -1,11 +1,12 @@
 version: 2
+
 sources:
-    - name: <schema>
+    - name: rudder_sessionization_unioned_pages_tracks_source
       tables:
-        - name: TRACKS
+        - name: unioned_pages_tracks
           columns:
             - name: anonymous_id
-
             - name: user_id
-
             - name: timestamp
+
+# Other configuration for tracks.yml

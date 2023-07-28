@@ -7,14 +7,14 @@
 {{ config(materialized='table') }}
 
 select *
-        ,timestamp_diff(cast(timestamp as timestamp), cast(lag(timestamp) over(partition by dbt_visitor_id order by timestamp) as timestamp), minute) as idle_time_minutes
+        ,DATEDIFF('minute', LAG(timestamp) OVER (PARTITION BY dbt_visitor_id ORDER BY timestamp), timestamp) AS idle_time_minutes
       from (
         select t.id as event_id
           ,t.anonymous_id
           ,a2v.dbt_visitor_id
           ,t.timestamp
           ,t.event as event
-        from {{ source("<schema>","TRACKS") }} as t
+        from {{ ref('unioned_pages_tracks') }}  as t
         inner join {{ ref('dbt_aliases_mapping') }} as a2v
         on a2v.alias = coalesce(t.user_id, t.anonymous_id)
         )
